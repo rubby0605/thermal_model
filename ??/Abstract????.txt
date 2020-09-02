@@ -1,0 +1,5 @@
+
+This thermal model has been developed incledes ion sputtering and photon desorption and it's based on thermal calculation includes the orbit radius, rotation periode and heat conduction.
+We use Monte Carlo method to choose the sputtered molecules's kinetics of ballistic motion heated by surface temperature, and as knowing
+
+

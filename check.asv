@@ -1,0 +1,44 @@
+disp('The Answer Is,,,')
+Radii=1;
+ thi=0;
+ 
+    for fi=0:pi/2:3*pi/2
+   s(1)=Radii*cos(thi)*sin(fi); % x
+   s(2)=Radii*cos(thi)*cos(fi); % y
+   s(3)=Radii*sin(thi); 
+Ri=sqrt(sum(s(:).^2));
+thi=asin(s(3)/Ri);
+fi=acot(s(1)/s(2));
+   if(s(1)<0),fi=-fi+pi;end
+   if(fi<0),fi=fi+pi*3/2;end
+   ns(1)=Radii*cos(thi)*sin(fi); % x
+   ns(2)=Radii*cos(thi)*cos(fi); % y
+   ns(3)=Radii*sin(thi); 
+   disp(s);disp(ns);
+    end
+disp(thi/pi*180)    
+%% 
+s=[-0.2 0.23  -31]
+          Ri=sqrt(sum(s(:).^2));
+thi=asin(s(3)/Ri);
+fi=asin(s(1)/sqrt((s(1)^2+s(2)^2)));
+   if(s(1)>0&&s(2)<0), fi=-fi+pi;end
+   if(s(1)<0&&s(2)<0), fi=-fi+pi;end
+   if(s(1)<0&&s(2)>0), fi=fi+2*pi;end
+      ns(1)=Ri*cos(thi)*sin(fi); % x
+      ns(2)=Ri*cos(thi)*cos(fi); % y
+      ns(3)=Ri*sin(thi); 
+      disp(ns);
+      %% 
+      thi=0;
+      for fii=0:0.01:2*pi
+                s(1)=Ri*cos(thi)*sin(fii); % x
+      s(2)=Ri*cos(thi)*cos(fii); % y
+      s(3)=Ri*sin(thi); 
+          Ri=sqrt(sum(s(:).^2));
+thi=asin(s(3)/Ri);
+fi=asin(s(1)/((s(1)^2+s(2)^2)));
+   if(fi<0), fi=fi+pi;end
+   if(s(1)<0),fi=fi+pi;end
+disp(fi)
+      end

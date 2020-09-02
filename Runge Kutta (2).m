@@ -1,0 +1,128 @@
+%% RK try
+% constant
+G=6.67e-11;      % m^3/kg/s^2
+K=1.38e-23;      % Boltzmann constant
+M=2.306518e21; % kg
+mole=6.02e23;  % moleculer 
+distance=10.11595804; % [AU]
+dv=1;
+lifetime=(distance/0.386)^2*(2.83e6); %[t]
+Radii=764.3e3;   % [m] P.C. Thomas et al,,2007
+mmass=44e-3;  % Oxygen
+ve=sqrt(2*G*M/Radii);          % escape speed [m/s]
+%% Probability of sin
+qq=1;
+n_sin=0;
+for i=0:0.01:pi 
+    aa=sin(i);
+    aa=aa*10000;
+    p_sin(n_sin+1:n_sin+1+ceil(aa))=i;
+    n_sin=n_sin+ceil(aa);
+    qq=qq+1;
+end
+n_sin=n_sin+1;
+%% Probability of cos
+qq=1;
+n_cos=0;
+for i=-pi/2:0.01:pi/2
+    aa=cos(i)*1e4;
+    p_cos(n_cos+1:n_cos+1+ceil(aa))=i;
+    n_cos=n_cos+ceil(aa);
+    qq=qq+1;
+end
+n_cos=n_cos+1;
+%% 
+h=100;   %% height grid points
+maxheight=1e6;  %% [meter]
+den_atm=zeros(h,ftd,ffd);
+h=10;    %% delta time
+horizon_CO2=zeros(ftd,ffd);
+
+%% 
+for n=1:10000
+thi=p_cos(ceil(rand*n_cos));     % random theta
+fi=p_sin(ceil(rand*n_sin));      % random phi
+    alt=0;
+for ballistic=1:1000
+   td=ceil((thi+pi/2)/pi*ftd);
+   fd=ceil(fi/2/pi*ffd);
+   if(fd==0)
+       fd=ffd;
+   end
+   if(td==0)
+       td=ftd;
+   end
+   local_T=plotT(td,fd);
+   if(local_T<=60)
+       horizon_CO2(td,fd)=horizon_CO2(td,fd)+1;
+       break;
+   end
+   ii=1;
+   flyd=rand*pi-pi/2;
+   xi=rand*pi-pi/2;
+   vr=0;
+   for mk=1:12
+   vr=vr+rand*12/11.9;
+   end
+   stdv2=2*K*local_T/mmass*mole;
+   vr=(vr+6)/12*2*sqrt(stdv2);
+   s(1)=Radii*cos(thi)*sin(fi); % x
+   s(2)=Radii*cos(thi)*cos(fi); % y
+   s(3)=Radii*sin(thi);         % z
+   v(1)=vr*cos(-flyd+thi)*sin(xi);
+   v(2)=vr*cos(-flyd+thi)*cos(xi);
+   v(3)=vr*sin(-flyd+thi);
+   Ri=sqrt(sum(s(:).^2));%%
+   oa=G*M*s(:)/(Ri^3);
+   for ii=1:1000
+   for i=1:3
+       ns(i)=s(i)+v(i)*h-G*M*s(i)/(Ri^3)*(1.5*(h^2))-oa(i)*(h^2)/6;
+       v(i)=v(i)-G*M*s(i)/(Ri^3)*h;
+       oa(i)=G*M*s(i)/(Ri^3);
+   end
+   if(s(1)>=0),alt=alt+h;end
+   s(:)=ns(:);
+   Ri=sqrt(sum(s(:).^2));%%
+   thi=asin(s(3)/Ri);
+   fi=atan(s(1)/s(2));
+   if(s(1)>0)
+       if(s(2)<0)
+           fi=fi+pi;
+       end
+   else if(s(2)>0)
+           fi=fi+2*pi;
+       else
+           fi=fi+pi;
+       end
+   end
+   if(s(1)>=0)
+       alt=alt+1;
+   end
+   td=ceil((thi+pi/2)/pi*ftd);
+   fd=ceil(fi/2/pi*ffd);
+   if(Ri-Radii<=0)
+       break;
+   end
+   height=ceil((Ri-Radii)/(maxheight-Radii)*h);
+   den_atm(height,td,fd)=den_atm(height,td,fd)+exp(-alt/lifetime);
+   end
+   
+end
+if(ceil(n/100)-n/100==0)
+    disp(n);
+end
+end
+%%
+plot_den=zeros(100,ffd);
+plot_den(:,:)=den_atm(:,ceil(ftd/2),:);
+imagesc(plot_den);
+%%
+figure(2)
+plot_den=zeros(100,ftd);
+plot_den(:,:)=den_atm(:,:,ceil(ffd/4));
+imagesc(plot_den);
+colorbar
+%%
+figure(3)
+imagesc(horizon_CO2);
+colorbar
