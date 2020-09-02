@@ -1,2 +1,2 @@
 # thermal_model
-# thermal_model
+#This code was developed by matlab. First you can use the thermal model output a temperature distribution suppose there was a spherical shape and under the solar flux at a distant position. (also the ball is rolling). And then you can also find some scripts to mimic the thin atmospheric particle dynamics on the sphere. The atmospheric dynamics also considers the desorption, cold trap, and also some probability of escape to construct the real way that might exist on the exosphere.
