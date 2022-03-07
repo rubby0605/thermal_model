@@ -50,8 +50,8 @@ int mat::init_fvm_mat(void)
 			}
 			tmp = dy / dxw;
 			tmp2=-dy / dxw;
-			trp.push_back(Trip(k-1,kk-1,tmp));
-			trp2.push_back(Trip(k-1,kk-1, tmp2));
+			trp2.push_back(Trip(k-1,kk-1,tmp));
+			trp.push_back(Trip(k-1,kk-1, tmp2));
 
             		// East
 			if(i == this->x)
@@ -64,16 +64,16 @@ int mat::init_fvm_mat(void)
 			}
 			tmp = dy / dxe - dV * PE /dxe;
 			tmp2=-dy / dxe + dV * PE /dxe;
-			trp.push_back(Trip(k-1,kk-1,tmp));
-			trp2.push_back(Trip(k-1,kk-1, tmp2));
+			trp2.push_back(Trip(k-1,kk-1,tmp));
+			trp.push_back(Trip(k-1,kk-1, tmp2));
             		// North
 			if(j != 1)
 			{
 				kk = (i-1)*this->y + j - 1;
 				tmp = dx / dyn - dV * PE / dyn;
 				tmp2=-dx / dyn + dV * PE / dyn;
-				trp.push_back(Trip(k-1,kk-1,tmp));
-				trp2.push_back(Trip(k-1,kk-1,tmp2));
+				trp2.push_back(Trip(k-1,kk-1,tmp));
+				trp.push_back(Trip(k-1,kk-1,tmp2));
 			}
             		//South
 			if(j != this->y)
@@ -81,8 +81,8 @@ int mat::init_fvm_mat(void)
 				kk = (i-1)*this->y + j + 1;
 				tmp = dx / dys;
 				tmp2=-dx / dys;
-				trp.push_back(Trip(k-1,kk-1,tmp));
-				trp2.push_back(Trip(k-1,kk-1,tmp2));
+				trp2.push_back(Trip(k-1,kk-1,tmp));
+				trp.push_back(Trip(k-1,kk-1,tmp2));
 			}
             		// Present
 			if(j == 1)
@@ -100,8 +100,8 @@ int mat::init_fvm_mat(void)
 	            		tmp = -(dy/dxe + dy/dxw + dx/dyn + dx/dys) + 2*dV/dt + dV*PE/dyn + dV*PE/dxe;
 	            		tmp2 = (dy/dxe + dy/dxw + dx/dyn + dx/dys) + 2*dV/dt - dV*PE/dyn - dV*PE/dxe;
 			}
-			trp.push_back(Trip(k-1,k-1,tmp));
-			trp2.push_back(Trip(k-1,k-1,tmp2));
+			trp2.push_back(Trip(k-1,k-1,tmp));
+			trp.push_back(Trip(k-1,k-1,tmp2));
 		
 		}
 	
